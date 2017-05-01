@@ -5,6 +5,7 @@ table = Board(4)
 main = Hand(1)
 main2 = Hand(2)
 
+# todo faire un menu aussi
 print main
 print table
 print main2

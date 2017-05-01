@@ -1,0 +1,116 @@
+import math
+import pygame
+from pygame.locals import *
+
+pygame.init()
+
+fenetre = pygame.display.set_mode((640, 480))
+fenetre.fill((255, 255, 255))
+fond = pygame.image.load("Images/grass.jpeg").convert()
+
+fenetre.blit(fond, (0,0))
+
+perso = pygame.image.load("Images/rock.jpg").convert().convert_alpha()
+
+#position_perso = perso.get_rect()
+#fenetre.blit(perso, position_perso)
+perso_x = 0
+perso_y = 0
+
+fenetre.blit(perso, (perso_x, perso_y))
+cardwidth = 60
+cardheight = 80
+
+pygame.display.flip()
+
+is_blue = True
+x = 30
+y = 30
+
+def triangle(fenetre,x,y,number):
+    r2 = 5.0/math.sqrt(2.0)
+    if(number == 0):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+5, y],[x, y+5]], 0)
+    if(number == 1):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+r2, y+r2],[x-r2, y+r2]], 0)
+    if(number == 2):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x-5, y],[x, y+5]], 0)
+    if(number == 3):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x-r2, y+r2],[x-r2, y-r2]], 0)
+    if(number == 4):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x-5, y],[x, y-5]], 0)
+    if(number == 5):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+r2, y-r2],[x-r2, y-r2]], 0)
+    if(number == 6):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+5, y],[x, y-5]], 0)
+    if(number == 7):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+r2, y+r2],[x+r2, y-r2]], 0)
+
+#BOUCLE INFINIE
+
+continuer = 1
+blue = 0, 0, 255
+while continuer:
+
+    for event in pygame.event.get():   
+
+        if event.type == QUIT:
+
+            continuer = 0
+
+        if event.type == MOUSEBUTTONDOWN:
+
+            if event.button == 1:
+
+                perso_x = event.pos[0]
+
+                perso_y = event.pos[1]
+	if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+
+            is_blue = not is_blue
+    
+    pressed = pygame.key.get_pressed()
+    if pressed[pygame.K_UP]: y -= 3
+    if pressed[pygame.K_DOWN]: y += 3
+    if pressed[pygame.K_LEFT]: x -= 3
+    if pressed[pygame.K_RIGHT]: x += 3
+
+
+    fenetre.fill((255, 255, 255))
+    fenetre.blit(fond, (0,0))
+    
+    for row in range(0,4):
+	for collum in range (0,4):
+	    pygame.draw.rect(fenetre, (0, 0, 0), pygame.Rect(200+row*cardwidth, 100+collum*cardheight, cardwidth, cardheight),2)
+
+    fenetre.blit(perso, (perso_x, perso_y))
+    if is_blue: color = (0, 0, 255)
+    else: color = (255, 0, 0)
+    pygame.draw.rect(fenetre, color, pygame.Rect(x, y, cardwidth, cardheight))
+
+    triangle(fenetre,x+2,y+2,0)
+    triangle(fenetre,x+cardwidth/2,y+2,1)
+    triangle(fenetre,x+cardwidth-2,y+2,2)
+    triangle(fenetre,x+cardwidth-2,y+cardheight/2,3)
+    triangle(fenetre,x+cardwidth-2,y+cardheight-2,4)
+    triangle(fenetre,x+cardwidth/2,y+cardheight-2,5)
+    triangle(fenetre,x+2,y+cardheight-2,6)
+    triangle(fenetre,x+2,y+cardheight/2,7)
+
+    pygame.display.flip()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

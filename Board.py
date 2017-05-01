@@ -72,23 +72,33 @@ class Board(object):
     def get(self,X,Y):
 	 return self.board[Y][X].inside
 
-    #0 for fights
-    #1 for combos
-    #2 for attacks
-    def interractions(self,card,fca):
-	interractions = []
+    def getFights(self,card):
+	fights = []
 	for number in card.arrows.keys():
 	    if card.arrows[number] == 1 and not outOfBoard(number,card):
 		X = getX(number,card.x)
 		Y = getY(number,card.y)
 		if self.board[Y][X].occupied and self.get(X,Y).player != card.player:
-		    if self.get(X,Y).arrows[(number+4)%8]==1 and fca==0:
-			interractions.append(number)
-		    elif fca == 1:
-			self.get(X,Y).changePlayer(card.player)
-		    elif self.get(X,Y).arrows[(number+4)%8]==0 and fca==2:
-			self.get(X,Y).changePlayer(card.player)
-	return interractions
+		    if self.get(X,Y).arrows[(number+4)%8]==1:
+			fights.append(number)
+	return fights
+
+    def combo(self,card):
+	for number in card.arrows.keys():
+	    if card.arrows[number] == 1 and not outOfBoard(number,card):
+		X = getX(number,card.x)
+		Y = getY(number,card.y)
+		if self.board[Y][X].occupied and self.get(X,Y).player != card.player:
+		    self.get(X,Y).changePlayer(card.player, card.color)
+
+    def attack(self,card):
+	for number in card.arrows.keys():
+	    if card.arrows[number] == 1 and not outOfBoard(number,card):
+		X = getX(number,card.x)
+		Y = getY(number,card.y)
+		if self.board[Y][X].occupied and self.get(X,Y).player != card.player:
+		    elif self.get(X,Y).arrows[(number+4)%8]==0:
+			self.get(X,Y).changePlayer(card.player, card.color)
 
     def play(self,card,X,Y):
 	if not (self.board[Y][X].occupied or self.board[Y][X].crushed) :
@@ -96,29 +106,30 @@ class Board(object):
 	    self.board[Y][X].add(card)
 	    cardIsOK = True
 	    # fights
-	    fights = self.interractions(card,0)
+	    fights = self.getFights(card)
 	    while len(fights)!=0:
 		if len(fights)>1:
 		    print fights
 		    number = int(raw_input("Choose the fight : "))
 		elif len(fights)==1:
 		    number = fights[0]
+
 		if number in fights:
 		    X = getX(number,card.x)
 		    Y = getY(number,card.y)
 		    cardIsOK = card.fight(self.get(X,Y))
 		    # combos
 		    if cardIsOK:
-			self.interractions(self.get(X,Y),1) 
-			fights = self.interractions(card,0)
+			self.combo(self.get(X,Y)) 
+			fights = self.getFights(card)
 		    else:
-			self.interractions(card,1)
+			self.combo(card)
 			fights = []
 		else :
 		    print "you must choose a card to fight baltringue"
 	    # attacks
 	    if cardIsOK:
-		self.interractions(card,2)
+		self.attack(card)
 		
 	    return True    
 	else :

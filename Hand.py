@@ -2,27 +2,27 @@ from Card import *
 
 class Hand(object):
     
-    def __init__(self,player):
-	print " hand for player " + str(player)
+    def __init__(self,playernumber, playercolor):
+	print " hand for player " + str(playernumber)
 	self.cards = []
-	self.player = player
+	self.player = playernumber
 	arrows1 = randint(1, 2)
-	card1 = Card(arrows1,player,1)
+	card1 = Card(arrows1, playernumber, 1, playercolor)
 	self.cards.append(card1)
 
 	arrows2 = randint(2, 4)
-	card2 = Card(arrows2,player,2)
+	card2 = Card(arrows2, playernumber, 2, playercolor)
 	self.cards.append(card2)
 
 	arrows3 = randint(3, 6)
-	card3 = Card(arrows3,player,3)
+	card3 = Card(arrows3, playernumber, 3, playercolor)
 	self.cards.append(card3)
 
-	card4 = Card(4,player,4)
+	card4 = Card(4, playernumber, 4, playercolor)
 	self.cards.append(card4)
 
 	arrows5 = 18 - (4 + arrows1+ arrows2+arrows3)
-	card5 = Card(arrows5,player,5)
+	card5 = Card(arrows5, playernumber, 5, playercolor)
 	self.cards.append(card5)
 
     def getCard(self,number):

@@ -1,0 +1,184 @@
+import math
+import pygame
+from pygame.locals import *
+from Hand import *
+from utils import *
+
+pygame.init()
+pygame.display.set_caption("Card Master")
+fenetre = pygame.display.set_mode((640, 640))
+fenetre.fill((255, 255, 255))
+fond = pygame.image.load("Images/grass.jpeg").convert()
+
+fenetre.blit(fond, (0,0))
+
+perso = pygame.image.load("Images/rock.jpg").convert().convert_alpha()
+
+myfont = pygame.font.SysFont("monospace", 20)
+perso_x = 0
+perso_y = 0
+
+fenetre.blit(perso, (perso_x, perso_y))
+
+
+cardwidth = 60
+cardheight = 80
+
+pygame.display.flip()
+
+is_blue = True
+x = 30
+y = 30
+r2 = 5.0/math.sqrt(2.0)
+
+testcard = pygame.Rect(x, y, cardwidth, cardheight)
+card_x = 30
+card_y = 30
+#fenetre.blit(perso, position_perso)
+
+selected = False
+
+def drawCard(x,y,color):
+    pygame.draw.rect(fenetre, color, pygame.Rect(x, y, cardwidth, cardheight))
+    arrow(fenetre,x+2,y+2,0)
+    arrow(fenetre,x+cardwidth/2,y+2,1)
+    arrow(fenetre,x+cardwidth-2,y+2,2)
+    arrow(fenetre,x+cardwidth-2,y+cardheight/2,3)
+    arrow(fenetre,x+cardwidth-2,y+cardheight-2,4)
+    arrow(fenetre,x+cardwidth/2,y+cardheight-2,5)
+    arrow(fenetre,x+2,y+cardheight-2,6)
+    arrow(fenetre,x+2,y+cardheight/2,7)
+    label = myfont.render("12", 10, (255,255,255))
+    fenetre.blit(label, (x+cardwidth/2-10, y+cardheight/2-10))
+
+
+def arrow(fenetre,x,y,number):
+    if(number == 0):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+5, y],[x, y+5]], 0)
+    if(number == 1):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+r2, y+r2],[x-r2, y+r2]], 0)
+    if(number == 2):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x-5, y],[x, y+5]], 0)
+    if(number == 3):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x-r2, y+r2],[x-r2, y-r2]], 0)
+    if(number == 4):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x-5, y],[x, y-5]], 0)
+    if(number == 5):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+r2, y-r2],[x-r2, y-r2]], 0)
+    if(number == 6):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+5, y],[x, y-5]], 0)
+    if(number == 7):
+	pygame.draw.polygon(fenetre, (255,255,255), [[x, y], [x+r2, y+r2],[x+r2, y-r2]], 0)
+
+
+pygame.key.set_repeat(400, 30)
+continuer = 1
+blue = (0, 0, 255)
+red = (255, 0, 0)
+
+def selectCard(x,y):
+    return x > card_x and x < card_x+cardwidth and y > card_y and y < card_y+cardheight
+
+def cursorOnBoard(x,y):
+    return x > 200 and x < 200+cardwidth*4 and y > 100 and y < 100+cardheight*4
+
+def getCaseX(x):
+    return  203 + int((x-200)/cardwidth)*(cardwidth+10)
+
+def getCaseY(y):
+    return 103 + int((y-100)/cardheight)*(cardheight+10)
+
+while continuer:
+
+    for event in pygame.event.get():   
+
+        if event.type == QUIT:
+
+            continuer = 0
+
+	if event.type == pygame.MOUSEMOTION:
+
+	    cursor_x = event.pos[0]
+            cursor_y = event.pos[1]
+
+        if event.type == MOUSEBUTTONDOWN:
+
+            if event.button == 3:
+
+                perso_x = event.pos[0]
+                perso_y = event.pos[1]
+
+	    if event.button == 1:
+
+                click_x = event.pos[0]
+                click_y = event.pos[1]
+
+		if(selectCard(click_x,click_y)):
+		    selected = not selected
+
+		if (selected and cursorOnBoard(click_x,click_y)):
+		    selected = False
+		    card_x = getCaseX(click_x)
+		    card_y = getCaseY(click_y)
+
+	if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+
+            is_blue = not is_blue
+
+    fenetre.fill((255, 255, 255))
+    fenetre.blit(fond, (0,0))
+    fenetre.blit(perso, (perso_x, perso_y))
+    for row in range(0,4):
+	for collum in range (0,4):
+	    pygame.draw.rect(fenetre, (0, 0, 0), pygame.Rect(200+row*(cardwidth+10), 100+collum*(cardheight+10), cardwidth+6, cardheight+6),2)
+
+    for handplaces in range(0,5):
+
+	pygame.draw.rect(fenetre, (0, 0, 0), pygame.Rect(100, 50+handplaces*(cardheight+10), cardwidth+6, cardheight+6),2)
+	drawCard(103,53 + handplaces*(cardheight+10),blue)
+
+	pygame.draw.rect(fenetre, (0, 0, 0), pygame.Rect(500, 50+handplaces*(cardheight+10), cardwidth+6, cardheight+6),2)
+	drawCard(503,53 + handplaces*(cardheight+10),red)
+    
+
+    if (is_blue):
+	color = blue
+	contour = red
+    else:
+	color = red
+	contour = blue
+    drawCard(card_x,card_y,color)
+
+    if (selected):
+	pygame.draw.rect(fenetre, contour, pygame.Rect(card_x, card_y, cardwidth, cardheight),3)
+
+	if (cursorOnBoard(cursor_x,cursor_y)):
+	    selected_x = getCaseX(cursor_x)
+	    selected_y = getCaseY(cursor_y)
+	    pygame.draw.rect(fenetre, contour, pygame.Rect(selected_x, selected_y, cardwidth, cardheight),2)
+
+    label2 = myfont.render(str(selected), 10, (0,0,0))
+    fenetre.blit(label2, (50, 250))
+    label3 = myfont.render(str(card_x), 10, (0,0,0))
+    fenetre.blit(label3, (50, 270))
+    label4 = myfont.render(str(card_y), 10, (0,0,0))
+    fenetre.blit(label4, (50, 290))
+
+    
+    pygame.display.flip()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

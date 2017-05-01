@@ -46,4 +46,6 @@ while len(main.cards)!=0 or len(main2.cards)!=0 :
 	    turn = not turn
 	else:
 	    main2.addCard(card)
+
+print table
 print "the game is over"
