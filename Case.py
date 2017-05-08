@@ -1,3 +1,5 @@
+from utils import *
+
 class Case(object):
     
     def __init__(self,y,x):
@@ -6,6 +8,8 @@ class Case(object):
 	self.crushed = False
 	self.x = x
 	self.y = y
+	self.px = 203 + x*(cardwidth+10)
+	self.py = 103 + y*(cardheight+10)
 	
     def __repr__(self):
 	if self.occupied:
@@ -20,6 +24,9 @@ class Case(object):
 	    self.occupied = True
 	    card.x = self.x
 	    card.y = self.y
+	    card.px = self.px
+	    card.py = self.py
+	    card.isSelected = False
 	    self.inside = card
 
     def crush(self):

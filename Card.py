@@ -9,14 +9,15 @@ class Card(object):
 	self.number = number
 	self.x=None
 	self.y=None
-	self.px=None
-	self.py=None
+	self.px = 103 + (player-1)*400
+	self.py = 53 + (number-1)*(cardheight+10)
 	self.player = player
         self.color = color
 	self.name = str(self.number) + str(self.player)[0]
 	self.arrows = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0}
 	self.LP = 20-2*n
 	self.maxLP = self.LP
+	self.isSelected = False
 	numberArrows = 0
 	while numberArrows != n:
 	    random = randint(0, 7)
@@ -71,6 +72,8 @@ class Card(object):
     	       self.drawArrow(fenetre,number)
         label = pygame.font.SysFont("monospace", 20).render(str(self.LP), 10, white)
         fenetre.blit(label, (self.px+cardwidth/2-10, self.py+cardheight/2-10))
+	if self.isSelected:
+	    pygame.draw.rect(fenetre, red, pygame.Rect(self.px, self.py, cardwidth, cardheight),3)
 
     def drawArrow(self,fenetre,number):
         if(number == 0):

@@ -18,7 +18,7 @@ class Board(object):
 		line.append( Case(y,x) )
 	    self.board.append(line)
 
-	if Coin():
+	if False:#Coin():
 	    self.numberOfRocks = randint(1, 6)
 	    print "Number of rock(s) is " + str(self.numberOfRocks) + "."
 	else :
@@ -72,10 +72,30 @@ class Board(object):
     def get(self,X,Y):
 	 return self.board[Y][X].inside
 
+    def outOfBoard(self,number,card):
+	upperlimit = len(self.board)-1
+        if number == 0 and card.x!=0 and card.y!=0:
+	    return False
+        elif number == 1 and card.y!=0:
+	    return False
+        elif number == 2 and card.x!=upperlimit and card.y!=0:
+	    return False
+        elif number == 3 and card.x!=upperlimit:
+	    return False
+        elif number == 4 and card.x!=upperlimit and card.y!=upperlimit:
+	    return False
+        elif number == 5 and card.y!=upperlimit:
+	    return False
+        elif number == 6 and card.x!=0 and card.y!=upperlimit:
+	    return False
+        elif number == 7 and card.x!=0:
+	    return False
+        return True
+
     def getFights(self,card):
 	fights = []
 	for number in card.arrows.keys():
-	    if card.arrows[number] == 1 and not outOfBoard(number,card):
+	    if card.arrows[number] == 1 and not self.outOfBoard(number,card):
 		X = getX(number,card.x)
 		Y = getY(number,card.y)
 		if self.board[Y][X].occupied and self.get(X,Y).player != card.player:
@@ -85,7 +105,7 @@ class Board(object):
 
     def combo(self,card):
 	for number in card.arrows.keys():
-	    if card.arrows[number] == 1 and not outOfBoard(number,card):
+	    if card.arrows[number] == 1 and not self.outOfBoard(number,card):
 		X = getX(number,card.x)
 		Y = getY(number,card.y)
 		if self.board[Y][X].occupied and self.get(X,Y).player != card.player:
@@ -93,11 +113,11 @@ class Board(object):
 
     def attack(self,card):
 	for number in card.arrows.keys():
-	    if card.arrows[number] == 1 and not outOfBoard(number,card):
+	    if card.arrows[number] == 1 and not self.outOfBoard(number,card):
 		X = getX(number,card.x)
 		Y = getY(number,card.y)
 		if self.board[Y][X].occupied and self.get(X,Y).player != card.player:
-		    elif self.get(X,Y).arrows[(number+4)%8]==0:
+		    if self.get(X,Y).arrows[(number+4)%8]==0:
 			self.get(X,Y).changePlayer(card.player, card.color)
 
     def play(self,card,X,Y):

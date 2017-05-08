@@ -34,25 +34,6 @@ r2 = 5.0/math.sqrt(2.0)
 def Coin():
     return bool(randint(0,1))
 
-def outOfBoard(number,card):
-    if number == 0 and card.x!=0 and card.y!=0:
-	return False
-    elif number == 1 and card.y!=0:
-	return False
-    elif number == 2 and card.x!=3 and card.y!=0:
-	return False
-    elif number == 3 and card.x!=3:
-	return False
-    elif number == 4 and card.x!=3 and card.y!=3:
-	return False
-    elif number == 5 and card.y!=3:
-	return False
-    elif number == 6 and card.x!=0 and card.y!=3:
-	return False
-    elif number == 7 and card.x!=0:
-	return False
-    return True
-
 def getX(number,x):
     if number == 0:
 	return x-1
