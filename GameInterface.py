@@ -1,154 +1,110 @@
 import pygame
 from pygame.locals import *
-from Hand import *
 from utils import *
 from Player import *
 from Board import *
 
-
-# TODO le choix des cartes a combattre
-# TODO le menu
-# TODO les animations
-# TODO l'affichage des scores et des étapes
+# TODO faire en trois manches gagnantes
+# TODO l'affichage des etapes
 # TODO masquer les cartes du joueur non actif
+# TODO optimiser les imports
+# TODO le menu
+# TODO ajouter des sons
+
 
 pygame.init()
 pygame.display.set_caption("Elementz")
-fenetre = pygame.display.set_mode((640, 640))
+fenetre = pygame.display.set_mode((800, 800))
 fenetre.fill(white)
-myfont = pygame.font.SysFont("monospace", 20)
-pygame.display.flip()
+
 
 cursor_x = 0
 cursor_y = 0
 selected = False
 cardSelected = None
 
-table = Board(4)
-garrett = Player("Garrett",1,purple)
-joueur2 = Player("p2",2,blue)
-
-allPlayers = []
-allPlayers.append(garrett) 
-allPlayers.append(joueur2) 
-activePlayerNumber = 1
-activePlayer = allPlayers[activePlayerNumber-1]
+table = Board(4,[Player("Garrett",1,purple),Player("p2",2,blue)])
 
 pygame.key.set_repeat(400, 30)
-continuer = 1
+playGame = 1
+menu = 1
 
-def selectCard(x,y,player):
-    for card in player.hand.cards:
-	if x > card.px and x < card.px+cardwidth and y > card.py and y < card.py+cardheight:
-	    if card.isSelected :
-		card.isSelected = not card.isSelected
-		cardSelected = None
-	    else :
-		for cardtochange in player.hand.cards:
-		    cardtochange.isSelected = False
-	        card.isSelected = True
-		cardSelected = card
-    for card in player.hand.cards:
-	if card.isSelected:
-	    return True
-    return False
+def newRound(table):
+    for player in table.players:
+        player.resetHand()
 
-def getSelectedCard(player):
-    for card in player.hand.cards:
-	if card.isSelected:
-	    return card
-    return None
+    return Board(4, table.players)
 
 def cursorOnBoard(x,y):
     return x > 203 and x < 203+(cardwidth+10)*4 and y > 103 and y < 103+(cardheight+10)*4
 
-def getCaseX(x):
-    return  203 + int((x-203)/(cardwidth+10))*(cardwidth+10)
+drawGame(table,fenetre)
+clickButtonToContinue("Start Game", fenetre)
 
-def getCaseY(y):
-    return 103 + int((y-103)/(cardheight+10))*(cardheight+10)
-
-while continuer:
+# TODO mettre dans une fonction et faire une differente pour le menu.
+while playGame:
 
     for event in pygame.event.get():   
 
         if event.type == QUIT:
 
-            continuer = 0
+            playGame = 0
 
-	if event.type == pygame.MOUSEMOTION:
+        if event.type == pygame.MOUSEMOTION:
 
-	    cursor_x = event.pos[0]
+            cursor_x = event.pos[0]
             cursor_y = event.pos[1]
+
+            if (selected and cursorOnBoard(cursor_x,cursor_y)):
+                selected_x = 203 + int((cursor_x-203)/(cardwidth+10))*(cardwidth+10)
+                selected_y = 103 + int((cursor_y-103)/(cardheight+10))*(cardheight+10)
+                pygame.draw.rect(fenetre, red, pygame.Rect(selected_x, selected_y, cardwidth, cardheight),2)
 
         if event.type == MOUSEBUTTONDOWN:
 
-	    if event.button == 1:
+            if event.button == 1:
 
                 click_x = event.pos[0]
                 click_y = event.pos[1]
 
-		selected = selectCard(click_x,click_y,activePlayer)
-		cardSelected = getSelectedCard(activePlayer);
+                selected = table.activePlayer.selectCard(click_x,click_y)
+                cardSelected = table.activePlayer.getSelectedCard();
 
-		if (selected and cursorOnBoard(click_x,click_y)):
-		    
-		    X = int((click_x-203)/(cardwidth+10))
-		    Y = int((click_y-103)/(cardheight+10))
-		    card = activePlayer.hand.getCard(cardSelected.number)
-		    cardIsPlayed = table.play(card,X,Y)
-		    if not cardIsPlayed:
-	    		activePlayer.hand.addCard(card)
-		    else:
-			selected = False
-			cardSelected = None
-			activePlayerNumber = 3-activePlayerNumber
-			activePlayer = allPlayers[activePlayerNumber-1]
+                if (selected and cursorOnBoard(click_x,click_y)):
+                    
+                    X = int((click_x-203)/(cardwidth+10))
+                    Y = int((click_y-103)/(cardheight+10))
+                    card = table.activePlayer.getCard(cardSelected.number)
+                    cardIsPlayed = table.play(card,X,Y,fenetre)
+                    if not cardIsPlayed:
+                        table.activePlayer.addCard(card)
+                    else:
+                        selected = False
+                        cardSelected = None
+                        table.nextPlayerTurn()
 
-	if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
 
             print "functions make details or stuff maybe"
 
-    fenetre.fill(white)
-    pygame.draw.rect(fenetre, black, pygame.Rect(0, 0, cardwidth, cardheight),2)
-    pygame.draw.rect(fenetre, black, pygame.Rect(197, 97, 4*(cardwidth+10)+3, 4*(cardheight+10)+3),2)
-    for line in table.board:
-	for case in line:
-	    if not case.crushed:
-	        pygame.draw.rect(fenetre, black, pygame.Rect(200+(case.x)*(cardwidth+10), 100+(case.y)*(cardheight+10), cardwidth+6, cardheight+6),2)
-	    if case.occupied:
-		case.inside.draw(fenetre)
+    drawGame(table,fenetre)
 
-    for handplaces in range(0,5):
-
-	pygame.draw.rect(fenetre, black, pygame.Rect(100, 50+handplaces*(cardheight+10), cardwidth+6, cardheight+6),2)
-	pygame.draw.rect(fenetre, black, pygame.Rect(500, 50+handplaces*(cardheight+10), cardwidth+6, cardheight+6),2)
-
-    for card in garrett.hand.cards:
-	card.draw(fenetre)
-
-    for card in joueur2.hand.cards:
-	card.draw(fenetre)
-
-    if (selected):
-
-	if (cursorOnBoard(cursor_x,cursor_y)):
-	    selected_x = getCaseX(cursor_x)
-	    selected_y = getCaseY(cursor_y)
-	    pygame.draw.rect(fenetre, red, pygame.Rect(selected_x, selected_y, cardwidth, cardheight),2)
-
-    label2 = myfont.render(str(getCaseX(cursor_x)), 10, black)
-    fenetre.blit(label2, (50, 250))
-    label3 = myfont.render(str(getCaseY(cursor_y)), 10, black)
-    fenetre.blit(label3, (50, 270))
-    label4 = myfont.render(str(cursor_x), 10, black)
-    fenetre.blit(label4, (50, 290))
-    label4 = myfont.render(str(cardSelected), 10, black)
-    fenetre.blit(label4, (50, 310))
+    label = pygame.font.SysFont("monospace", 20).render(str(table.activePlayerNumber), 10, black)
+    fenetre.blit(label, (10, 200))
 
     pygame.display.flip()
 
+    
+    if (table.allHandsAreEmpty()):
 
+        table.actualizeRounds(fenetre)
+
+        if table.aPlayerWonTheGame(fenetre):
+            playGame = 0
+            break;
+
+        table = newRound(table)
+        
 
 
 
