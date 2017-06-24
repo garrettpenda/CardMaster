@@ -52,23 +52,23 @@ class Card(object):
                     otherCard.LP -= 1
                     attack = not attack
                     time.sleep( 0.1 )
-                    drawGame(table,fenetre)
+                    table.drawGame(fenetre)
                 else:
                     self.LP -= 1
                     attack = not attack
                     time.sleep( animationTime )
-                    drawGame(table,fenetre)
+                    table.drawGame(fenetre)
             if self.LP == 0:
                 self.reborn() 
                 self.changePlayer(otherCard.player, otherCard.color)
                 time.sleep( animationTime )
-                drawGame(table,fenetre)
+                table.drawGame(fenetre)
                 return False
             else:
                 otherCard.reborn()
                 otherCard.changePlayer(self.player, self.color)
                 time.sleep( animationTime )
-                drawGame(table,fenetre)
+                table.drawGame(fenetre)
                 return True
 
     def getName(self):

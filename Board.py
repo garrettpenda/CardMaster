@@ -1,7 +1,4 @@
-import pygame
-from pygame.locals import *
 
-from Card import *
 from Case import *
 from utils import *
 
@@ -42,8 +39,6 @@ class Board(object):
     def nextPlayerTurn(self):
         self.activePlayerNumber = (self.activePlayerNumber+1) % len(self.players)
         self.activePlayer = self.players[self.activePlayerNumber]
-	
-
 
     def __repr__(self):
         for Y in range(len(self.board)):
@@ -130,12 +125,11 @@ class Board(object):
             for cardandcolor in cardsAndColors:
                 cardandcolor[0].color = cardandcolor[1]
             time.sleep( animationTime )
-            drawGame(self,fenetre)
+            self.drawGame(fenetre)
             for cardandcolor in cardsAndColors:
                 cardandcolor[0].color = card.color
             time.sleep( animationTime )
-            drawGame(self,fenetre)
-            
+            self.drawGame(fenetre)
 
     def attack(self,card):
         for number in card.arrows.keys():
@@ -182,7 +176,6 @@ class Board(object):
             print "This case is occupied or crushed."
             self.actualizeScores()
             return False
-        
 
     def actualizeRounds(self,fenetre):
         winner = self.players[0]
@@ -205,15 +198,15 @@ class Board(object):
 
     def chooseCardToFight(self,fenetre,fights,card):
         # trouver les cartes
-        drawGame(self,fenetre)
+        self.drawGame(fenetre)
         allCardsToFight = []
         for number in fights:
             X = getX(number,card.x)
             Y = getY(number,card.y)
             allCardsToFight.append([self.get(X,Y),number])
         # les afficher
-        for cardandnumber in allCardsToFight :
-            cardToFight = cardandnumber[0]
+        for cardAndNumber in allCardsToFight :
+            cardToFight = cardAndNumber[0]
             pygame.draw.rect(fenetre, red, pygame.Rect(cardToFight.px, cardToFight.py, cardwidth, cardheight),2)
         pygame.display.flip()
         # en choisir une
@@ -224,11 +217,11 @@ class Board(object):
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:
                     click_x = event.pos[0]
                     click_y = event.pos[1]
-                    for cardandnumber in allCardsToFight :
-                        cardToFight = cardandnumber[0]
-                        if cardTofight.isClickedOn(click_x,click_y):
+                    for cardAndNumber in allCardsToFight :
+                        cardToFight = cardAndNumber[0]
+                        if cardToFight.isClickedOn(click_x,click_y):
                             hasSelectACardToFight = True
-                            number = cardandnumber[1]
+                            number = cardAndNumber[1]
         return number
 
     def allHandsAreEmpty(self):
@@ -240,11 +233,42 @@ class Board(object):
     def aPlayerWonTheGame(self, fenetre):
         for player in self.players:
             if player.round == 2:
-		clickButtonToContinue("The player " + player.name + " is the elementz master.", fenetre)
                 return True
         return False
 
 
+    def drawGame(self, fenetre):
+        fenetre.fill(white)
+        pygame.draw.rect(fenetre, black, pygame.Rect(0, 0, cardwidth, cardheight), 2)
+        pygame.draw.rect(fenetre, black, pygame.Rect(197, 97, 4 * (cardwidth + 10) + 3, 4 * (cardheight + 10) + 3), 2)
+        for line in self.board:
+            for case in line:
+                if not case.crushed:
+                    pygame.draw.rect(fenetre, black,
+                                     pygame.Rect(200 + (case.x) * (cardwidth + 10), 100 + (case.y) * (cardheight + 10),
+                                                 cardwidth + 6, cardheight + 6), 2)
+                if case.occupied:
+                    case.inside.draw(fenetre)
+
+        for handplaces in range(0, 5):
+            pygame.draw.rect(fenetre, black,
+                             pygame.Rect(100, 50 + handplaces * (cardheight + 10), cardwidth + 6, cardheight + 6), 2)
+            pygame.draw.rect(fenetre, black,
+                             pygame.Rect(500, 50 + handplaces * (cardheight + 10), cardwidth + 6, cardheight + 6), 2)
+
+        for player in self.players:
+            for card in player.cards:
+                card.draw(fenetre)
+        scoresLabel = pygame.font.SysFont("monospace", 20).render(
+            self.players[0].name + " " + str(self.players[0].score) + "  /  " + str(self.players[1].score) + " " +
+            self.players[1].name, 10, black)
+
+        roundsLabel = pygame.font.SysFont("monospace", 20).render(
+            self.players[0].name + " " + str(self.players[0].round) + "  /  " + str(self.players[1].round) + " " +
+            self.players[1].name, 10, black)
+        fenetre.blit(scoresLabel, (250, 80))
+        fenetre.blit(roundsLabel, (250, 50))
+        pygame.display.update()
 
 
 
