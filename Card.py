@@ -7,11 +7,16 @@ class Card(object):
         self.number = number
         self.x=None
         self.y=None
-        self.px = 103 + (player-1)*400
-        self.py = 53 + (number-1)*(cardheight+10)
+	if player.number == 1:
+            self.px = hand_p1_px + card_intern_interval
+	    self.py = hand_p1_py + card_intern_interval + (number-1)*(cardheight+card_extern_interval)
+	elif player.number == 2:
+	    self.px = hand_p2_px + card_intern_interval
+	    self.py = hand_p2_py + card_intern_interval + (number-1)*(cardheight+card_extern_interval)
+        
         self.player = player
-        self.color = color
-        self.name = str(self.number) + str(self.player)[0]
+        self.color = self.player.color
+        self.name = str(self.number) + str(self.player.name)[0]
         self.arrows = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0}
         self.LP = 20-2*n
         self.maxLP = self.LP
@@ -22,16 +27,6 @@ class Card(object):
             if self.arrows[random]==0:
                  numberArrows += 1
                  self.arrows[random]=1
-
-    def __repr__(self):
-        string = "+-------+\n"
-        string += "| " + str(self.arrows[0]) + " " + str(self.arrows[1]) + " " + str(self.arrows[2]) + " |\n"
-        string += "| " + str(self.arrows[7]) + " " + str(self.player) + " " + str(self.arrows[3]) + " |\n"
-        string += "| " + str(self.arrows[6]) + " " + str(self.arrows[5]) + " " + str(self.arrows[4])+ " |\n"
-        string += "+-------+\n"
-        string += "| "+ str(self.LP).zfill(2) +"/"+ str(self.maxLP).zfill(2) +" |\n"
-        string += "+-------+\n"
-        return string
 
     def isClickedOn(self, x, y):
         return x >= self.px and x <= self.px+cardwidth and y >= self.py and y <= self.py+cardheight
@@ -44,7 +39,6 @@ class Card(object):
         self.LP = (self.maxLP)/2
 
     def fight(self,otherCard,table,fenetre):
-        print self.name + " fights " + otherCard.name
         attack = True
         if not(self.player==otherCard.player):
             while(self.LP != 0 and otherCard.LP != 0 ):
@@ -75,14 +69,23 @@ class Card(object):
         return self.name+"("+str(self.LP).zfill(2)+"/"+str(self.maxLP).zfill(2)+self.player
 
     def draw(self,fenetre):
-        pygame.draw.rect(fenetre, self.color, pygame.Rect(self.px, self.py, cardwidth, cardheight))
+        pygame.draw.rect(fenetre, self.color, pygame.Rect(self.px,
+							  self.py,
+							  cardwidth, 
+							  cardheight))
         for number in self.arrows.keys():
             if (self.arrows[number]==1):
                    self.drawArrow(fenetre,number)
         label = pygame.font.SysFont("monospace", 20).render(str(self.LP), 10, white)
         fenetre.blit(label, (self.px+cardwidth/2-10, self.py+cardheight/2-10))
         if self.isSelected:
-            pygame.draw.rect(fenetre, red, pygame.Rect(self.px, self.py, cardwidth, cardheight),3)
+            pygame.draw.rect(fenetre, red, pygame.Rect(self.px, self.py, cardwidth, cardheight), border)
+
+    def draw_hidden(self,fenetre):
+        pygame.draw.rect(fenetre, self.color, pygame.Rect(self.px,
+							  self.py, 
+							  cardwidth,
+							  cardheight))
 
     def drawArrow(self,fenetre,number):
         if(number == 0):

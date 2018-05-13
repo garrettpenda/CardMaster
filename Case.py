@@ -8,8 +8,8 @@ class Case(object):
         self.crushed = False
         self.x = x
         self.y = y
-        self.px = 203 + x*(cardwidth+10)
-        self.py = 103 + y*(cardheight+10)
+        self.px = board_px + boarding + x*(cardwidth + card_extern_interval) + card_intern_interval
+        self.py = board_py + boarding + y*(cardheight + card_extern_interval) + card_intern_interval
     
     def __repr__(self):
         if self.occupied:
@@ -30,6 +30,7 @@ class Case(object):
             self.inside = card
 
     def crush(self):
-        if not self.crushed:
-            self.crushed = True
+	self.inside = None
+	self.occupied = False
+        self.crushed = True
 

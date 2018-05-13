@@ -9,10 +9,12 @@ class Board(object):
         self.size = size
         self.board = []
         self.players = players
-	self.activePlayerNumber = randint(0,len(self.players)-1)
-	self.activePlayer = self.players[self.activePlayerNumber]
+        self.active_player_number = randint(0,len(self.players)-1)
+        self.active_player = self.players[self.active_player_number]
+        self.active_player_name = self.players[self.active_player_number].name
         self.rocksOnBoard = 0
         self.numberOfRocks = 0
+	self.message = pygame.font.SysFont("monospace", 20).render('kebab',10, black)
 
         for y in range(size):
             line = []
@@ -22,14 +24,10 @@ class Board(object):
 
         if Coin():
             self.numberOfRocks = randint(1, 6)
-            print "Number of rock(s) is " + str(self.numberOfRocks) + "."
-        else :
-            print "No rocks for this game."
         
         while self.rocksOnBoard != self.numberOfRocks:
             randomX = randint(0, self.size-1)
             randomY = randint(0, self.size-1)
-            # TODO animation de case qui disparaissent
             if not self.board[randomY][randomX].crushed:
                  self.rocksOnBoard+=1
                  self.board[randomY][randomX].crush()
@@ -37,46 +35,10 @@ class Board(object):
         self.actualizeScores()
 
     def nextPlayerTurn(self):
-        self.activePlayerNumber = (self.activePlayerNumber+1) % len(self.players)
-        self.activePlayer = self.players[self.activePlayerNumber]
-
-    def __repr__(self):
-        for Y in range(len(self.board)):
-            line1 = ""
-            line2 = ""
-            line3 = ""
-            line4 = ""
-            line5 = "  "
-            for X in range(len(self.board[Y])):
-                line4 += "  |               "
-                line5 += "+-----+-----+-----"
-                if (not self.board[Y][X].occupied) or self.board[Y][X].crushed:
-                    line1 += "  |  " + str(self.board[Y][X])
-                    line2 += "  |  " + str(self.board[Y][X]) 
-                    line3 += "  |  " + str(self.board[Y][X])
-                else:
-                    line1 += "  |  " + str(self.board[Y][X].inside.arrows[0])
-                    line1 += "     " + str(self.board[Y][X].inside.arrows[1])
-                    line1 += "     " + str(self.board[Y][X].inside.arrows[2])
-                    line2 += "  |  " + str(self.board[Y][X].inside.arrows[7])
-                    line2 += "   " + str(self.board[Y][X].inside.LP).zfill(2) + " P" + str(self.board[Y][X].inside.player)
-                    line2 += "   " + str(self.board[Y][X].inside.arrows[3])
-                    line3 += "  |  " + str(self.board[Y][X].inside.arrows[6])
-                    line3 += "     " + str(self.board[Y][X].inside.arrows[5])
-                    line3 += "     " + str(self.board[Y][X].inside.arrows[4])
-            line1 += "  |" 
-            line2 += "  |" 
-            line3 += "  |"
-            line4 += "  |"
-            line5 += "+"
-            print line5
-            print line1
-            print line4
-            print line2
-            print line4
-            print line3
-        print line5
-        return ""
+        self.active_player_number = (self.active_player_number+1) % len(self.players)
+        self.active_player = self.players[self.active_player_number]
+	self.active_player_name = self.players[self.active_player_number].name
+	
 
     def get(self,X,Y):
          return self.board[Y][X].inside
@@ -148,9 +110,7 @@ class Board(object):
             fights = self.getFights(card)
             while len(fights)!=0:
                 if len(fights)>1:
-                    print fights
-                    number = self.chooseCardToFight(fenetre,fights,card)
-                    #number = int(raw_input("Choose the fight : "))
+		    number = self.chooseCardToFight(fenetre,fights,card)
                 elif len(fights)==1:
                     number = fights[0]
 
@@ -165,26 +125,32 @@ class Board(object):
                     else:
                         self.combo(card,fenetre)
                         fights = []
-                else :
-                    print "you must choose a card to fight baltringue"
+                    
             # attacks
             if cardIsOK:
                 self.attack(card)
             self.actualizeScores()
             return True    
         else :
-            print "This case is occupied or crushed."
+	    self.draw_message(text_case_occupied,fenetre)
             self.actualizeScores()
             return False
 
-    def actualizeRounds(self,fenetre):
-        winner = self.players[0]
-        for player in self.players:
-            if player.score > winner.score:
-                winner = player
-        if winner.score > 5:
-            winner.round = winner.round + 1
-            clickButtonToContinue("The player " + winner.name + " win the round.", fenetre)
+    def actualizeRounds(self, fenetre):
+	
+	scores = {}
+	for player in [p for p in self.players if not p.surrender_round]:
+	    scores[player] = player.score
+	draw = not len(scores)==1 and all(scores.values()[0] == item for item in scores.values())
+	
+	if draw:
+	   clickButtonToContinue(text_draw, fenetre)
+	else:
+	    winner = max(scores, key=lambda key: scores[key])
+	    winner.round += 1
+	    self.draw_message(text_player_won_round % winner.name, fenetre)
+            clickButtonToContinue(text_continue, fenetre)
+
 
     def actualizeScores(self):
         for player in self.players:
@@ -193,12 +159,17 @@ class Board(object):
             for case in line:
                 if case.occupied:
                     for player in self.players:
-                        if case.inside.player == player.number:
+                        if case.inside.player == player:
                             player.score = player.score+1
 
+    def draw_message(self, message, fenetre):
+	self.message = pygame.font.SysFont("monospace", 20).render(message, 10, black)
+	self.drawGame(fenetre)
+
     def chooseCardToFight(self,fenetre,fights,card):
+	self.draw_message(text_choose_card, fenetre)
+	
         # trouver les cartes
-        self.drawGame(fenetre)
         allCardsToFight = []
         for number in fights:
             X = getX(number,card.x)
@@ -230,35 +201,64 @@ class Board(object):
                 return False
         return True
 
-    def aPlayerWonTheGame(self, fenetre):
+    def aPlayerWonTheGame(self):
         for player in self.players:
-            if player.round == 2:
+            if player.round == rounds_to_win:
                 return True
         return False
+
+    def only_one_active_player(self):
+        return len([p for p in self.players if not p.surrender_round]) == 1
+
+    def capitulate_round(self):
+	self.active_player.score = 0
+	self.active_player.cards = []
+	self.active_player.surrender_round = True
+	for line in self.board:
+	    for case in line:
+		if case.occupied and case.inside.player == self.active_player:
+		    case.crush()
 
 
     def drawGame(self, fenetre):
         fenetre.fill(white)
-        pygame.draw.rect(fenetre, black, pygame.Rect(0, 0, cardwidth, cardheight), 2)
-        pygame.draw.rect(fenetre, black, pygame.Rect(197, 97, 4 * (cardwidth + 10) + 3, 4 * (cardheight + 10) + 3), 2)
+        pygame.draw.rect(fenetre, black, pygame.Rect(board_px, 
+						     board_py,
+						     size_of_board * (cardwidth + card_extern_interval) + boarding,
+						     size_of_board * (cardheight + card_extern_interval) + boarding), border)
         for line in self.board:
             for case in line:
-                if not case.crushed:
-                    pygame.draw.rect(fenetre, black,
-                                     pygame.Rect(200 + (case.x) * (cardwidth + 10), 100 + (case.y) * (cardheight + 10),
-                                                 cardwidth + 6, cardheight + 6), 2)
-                if case.occupied:
-                    case.inside.draw(fenetre)
+                if case.crushed:
+                    pygame.draw.rect(fenetre, black, pygame.Rect(board_px + (case.x) * (cardwidth + card_extern_interval) + boarding,
+                                                      		 board_py + (case.y) * (cardheight + card_extern_interval) + boarding,
+                                                      		 cardwidth + 2*card_intern_interval,
+                                                      		 cardheight + 2*card_intern_interval))
+                else:
+                    pygame.draw.rect(fenetre, black, pygame.Rect(board_px + (case.x) * (cardwidth + card_extern_interval) + boarding,
+								 board_py + (case.y) * (cardheight + card_extern_interval) + boarding,
+                                                 		 cardwidth + 2*card_intern_interval,
+								 cardheight + 2*card_intern_interval), border)
+                    if case.occupied:
+                        case.inside.draw(fenetre)
 
         for handplaces in range(0, 5):
-            pygame.draw.rect(fenetre, black,
-                             pygame.Rect(100, 50 + handplaces * (cardheight + 10), cardwidth + 6, cardheight + 6), 2)
-            pygame.draw.rect(fenetre, black,
-                             pygame.Rect(500, 50 + handplaces * (cardheight + 10), cardwidth + 6, cardheight + 6), 2)
+            pygame.draw.rect(fenetre, black, pygame.Rect(hand_p1_px,
+							 hand_p1_py + handplaces * (cardheight + card_extern_interval),
+							 cardwidth + 2*card_intern_interval,
+							 cardheight + 2*card_intern_interval), border)
+            pygame.draw.rect(fenetre, black, pygame.Rect(hand_p2_px,
+					 		 hand_p2_py + handplaces * (cardheight + card_extern_interval),
+							 cardwidth + 2*card_intern_interval,
+							 cardheight + 2*card_intern_interval), border)
 
         for player in self.players:
-            for card in player.cards:
-                card.draw(fenetre)
+	    if self.active_player == player:
+            	for card in player.cards:
+                    card.draw(fenetre)
+	    else:
+		for card in player.cards:
+		    card.draw_hidden(fenetre)
+
         scoresLabel = pygame.font.SysFont("monospace", 20).render(
             self.players[0].name + " " + str(self.players[0].score) + "  /  " + str(self.players[1].score) + " " +
             self.players[1].name, 10, black)
@@ -268,6 +268,11 @@ class Board(object):
             self.players[1].name, 10, black)
         fenetre.blit(scoresLabel, (250, 80))
         fenetre.blit(roundsLabel, (250, 50))
+
+	button(fenetre, text_capitulate_round, buttonpx - 250, buttonpy, self.active_player.color, black, self.capitulate_round )
+
+	fenetre.blit(self.message, (200, 680))
+
         pygame.display.update()
 
 

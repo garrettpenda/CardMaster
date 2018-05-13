@@ -7,32 +7,23 @@ class Player(object):
         self.name = name
         self.number = number
         self.color = color
-        # golem, phenix, epee, source, elementaire
-        self.cards = []
-        arrows1 = 2 #randint(1, 2)
-        self.cards.append(Card(arrows1, number, 1, color))
-        arrows2 = randint(2, 4)
-        self.cards.append(Card(arrows2, number, 2, color))
-        arrows3 = randint(3, 6)
-        self.cards.append(Card(arrows3, number, 3, color))
-        self.cards.append(Card(4, number, 4, color))
-        arrows5 = 18 - (4 + arrows1+ arrows2+arrows3)
-        self.cards.append(Card(arrows5, number, 5, color))
-
+	self.surrender_game = False
+	self.surrender_round = False
+        self.reset_hand()
         self.score = 0
         self.round = 0
 
-    def resetHand(self):
+    def reset_hand(self):
         self.cards = []
         arrows1 = randint(1, 2)
-        self.cards.append(Card(arrows1, self.number, 1, self.color))
+        self.cards.append(Card(arrows1, self, 1, self.color))
         arrows2 = randint(2, 4)
-        self.cards.append(Card(arrows2, self.number, 2, self.color))
+        self.cards.append(Card(arrows2, self, 2, self.color))
         arrows3 = randint(3, 6)
-        self.cards.append(Card(arrows3, self.number, 3, self.color))
-        self.cards.append(Card(4, self.number, 4, self.color))
+        self.cards.append(Card(arrows3, self, 3, self.color))
+        self.cards.append(Card(4, self, 4, self.color))
         arrows5 = 18 - (4 + arrows1+ arrows2+arrows3)
-        self.cards.append(Card(arrows5, self.number, 5, self.color))
+        self.cards.append(Card(arrows5, self, 5, self.color))
 
     def changeColor(self):
         number = int(raw_input("1 for red, 2 for blue, 3 for green, 4 for black, 5 for yellow and 6 for purple."))
