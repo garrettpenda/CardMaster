@@ -13,11 +13,11 @@ class Case(object):
     
     def __repr__(self):
         if self.occupied:
-            return self.inside.getName()
+            return self.inside.name
         elif self.crushed:
-            return " XXXXXXXXXXX "
+            return "XX"
         else:
-            return "             "
+            return "  "
 
     def add(self,card):
         if not (self.occupied or self.crushed):
@@ -30,7 +30,7 @@ class Case(object):
             self.inside = card
 
     def crush(self):
-	self.inside = None
-	self.occupied = False
+        self.inside = None
+        self.occupied = False
         self.crushed = True
 
