@@ -1,0 +1,343 @@
+# Play one card on a empty board
+round_1:
+
+  board:
+    size_x: 4
+    size_y: 4
+    crushed:
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.D
+        - Directions.RU
+
+  player_2:
+
+    board:
+
+    hand:
+
+# Play one card to attack another card
+round_2:
+
+  board:
+    size_x: 2
+    size_y: 1
+    crushed:
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.L
+
+
+  player_2:
+
+    board:
+      - x: 1
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.R
+    hand:
+
+# Play one card to attack another card
+round_3:
+
+  board:
+    size_x: 2
+    size_y: 1
+    crushed:
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.R
+
+
+  player_2:
+
+    board:
+      - x: 1
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.R
+    hand:
+
+# Play one card to win a fight against another card
+round_4:
+
+  board:
+    size_x: 2
+    size_y: 1
+    crushed:
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.R
+
+  player_2:
+    board:
+      - x: 1
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.L
+    hand:
+
+# Play one card to lose a fight against another card
+round_5:
+
+  board:
+    size_x: 2
+    size_y: 1
+    crushed:
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.R
+
+  player_2:
+    board:
+      - x: 1
+        y: 0
+        life_point: 8
+        arrows:
+          - Directions.L
+    hand:
+
+# Play one card next to a void case
+round_6:
+
+  board:
+    size_x: 3
+    size_y: 1
+    crushed:
+      - x: 1
+        y: 0
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.R
+
+  player_2:
+    board:
+      - x: 2
+        y: 0
+        life_point: 8
+        arrows:
+          - Directions.L
+    hand:
+
+# Play one card to win a combo
+round_7:
+
+  board:
+    size_x: 3
+    size_y: 2
+    crushed:
+     - x: 0
+       y: 0
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.RU
+        - Directions.R
+
+
+  player_2:
+    board:
+
+      - x: 1
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.R
+          - Directions.L
+          - Directions.RU
+      - x: 1
+        y: 1
+        life_point: 6
+        arrows:
+          - Directions.R
+          - Directions.L
+          - Directions.RU
+      - x: 2
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.U
+          - Directions.L
+
+      - x: 2
+        y: 1
+        life_point: 6
+        arrows:
+          - Directions.U
+          - Directions.L
+    hand:
+
+# Play one card to lose a combo
+round_8:
+
+  board:
+    size_x: 3
+    size_y: 2
+    crushed:
+     - x: 1
+       y: 0
+     - x: 2
+       y: 0
+
+  player_1:
+    board:
+    - x: 0
+      y: 0
+      life_point: 6
+      arrows:
+        - Directions.U
+        - Directions.D
+    - x: 0
+      y: 1
+      life_point: 6
+      arrows:
+        - Directions.U
+        - Directions.D
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.R
+        - Directions.L
+        - Directions.LU
+
+  player_2:
+    board:
+      - x: 2
+        y: 1
+        life_point: 10
+        arrows:
+          - Directions.L
+    hand:
+
+# Play one card to lose multiple fights
+round_9:
+
+  board:
+    size_x: 3
+    size_y: 2
+    crushed:
+     - x: 0
+       y: 0
+     - x: 1
+       y: 0
+     - x: 2
+       y: 1
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.RU
+        - Directions.L
+
+
+  player_2:
+
+    board:
+      - x: 0
+        y: 1
+        life_point: 6
+        arrows:
+          - Directions.R
+      - x: 2
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.LD
+
+    hand:
+
+# Play one card with multiple fight but with combo
+round_10:
+
+  board:
+    size_x: 2
+    size_y: 2
+    crushed:
+     - x: 0
+       y: 0
+
+  player_1:
+
+    board:
+
+    hand:
+    - life_point: 7
+      number: 3
+      arrows:
+        - Directions.R
+        - Directions.RU
+
+
+  player_2:
+    board:
+      - x: 1
+        y: 0
+        life_point: 6
+        arrows:
+          - Directions.D
+          - Directions.LD
+      - x: 1
+        y: 1
+        life_point: 6
+        arrows:
+          - Directions.U
+          - Directions.L
+    hand:

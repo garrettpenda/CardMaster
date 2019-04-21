@@ -1,0 +1,77 @@
+
+#===========================
+# sizes and positions
+#===========================
+
+
+# SIZES
+
+# WINDOW
+window_width : 800
+window_height : 800
+
+# BOARD
+
+boarding : 10
+border : 2
+
+# CARDS
+card_width : 90
+card_height : 90
+
+card_extern_interval : 10
+card_intern_interval : 3
+
+# ARROWS
+
+arrow_size : 8.0
+arrow_boarding : 2
+
+
+# INPUTS
+input_box_width: 250
+input_box_height: 50
+
+# BUTTONS
+button_width : 200
+button_height : 100
+
+# COLOR BOXES
+color_box_width: 80
+color_box_height: 80
+
+#===========
+# MENUS
+#===========
+
+# TUTORIAL MESSAGES
+tutorial_message_width: 500
+tutorial_message_height: 250
+
+# QUIT MENU
+quit_game_menu_width: 500
+quit_game_menu_height:  250
+
+# CONFIRM CAPITULATE MENU
+confirm_capitulate_menu_width: 500
+confirm_capitulate_menu_height:  250
+
+# WORK IN PROGRESS MENU
+work_in_progress_menu_width: 500
+work_in_progress_menu_height:  250
+
+# END ROUND MENU
+end_round_menu_width: 500
+end_round_menu_height: 250
+
+# END GAME MENU
+end_game_menu_width: 500
+end_game_menu_height: 250
+
+# IN GAME MENU
+in_game_menu_width: 400
+in_game_menu_height: 400
+
+# IN TUTORIAL IN GAME MENU
+in_game_tutorial_menu_width: 400
+in_game_tutorial_menu_height: 600

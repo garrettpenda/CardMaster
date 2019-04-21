@@ -1,0 +1,9 @@
+#===========================
+# sizes and positions
+#===========================
+
+size_of_board : 4
+rounds_to_win: 2
+
+animationTime : 0.05
+animation_time: 0.01

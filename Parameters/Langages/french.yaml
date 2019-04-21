@@ -1,0 +1,117 @@
+
+#===========
+# Francais
+#===========
+
+text_draw : 'Egalite'
+text_capitulate_round : 'Capituler'
+
+
+text_continue : "Continuer"
+text_return_to_menu : "Retour au menu"
+text_return_to_game : "Retour au jeu"
+
+text_player_won : "Le joueur %s a gagne la partie."
+text_player_won_round : "Le joueur %s a gagne la manche."
+text_case_occupied : "Cette case est deja occupee ou consumee par le vide."
+
+text_victory: "Victoire !"
+text_defeat: "Defaite !"
+
+text_enter_login : "Entrer votre identifiant : "
+text_enter_password : "Entrer votre mot de passe : "
+text_choose_color : "Choisissez un element : "
+
+text_yes : "Oui"
+text_no : "Non"
+
+text_opponent_turn: "Votre adversaire est en train de jouer."
+text_IA_playing: "L'ordinateur est en train de jouer"
+
+text_quit_game_question : "Quiter le jeu ?"
+text_capitulate_game_question : "Capituler la partie ?"
+text_replay_tutorial: "Rejouer le tutoriel"
+text_step_count: "Etape : %s"
+
+text_connexion : "Connexion"
+text_start_game : "2 Joueurs"
+text_start_3_players_game : "3 Joueurs"
+text_start_2_players_game : "2 Joueurs"
+text_start_game_versus_ia : "Jouer contre l'ordinateur"
+text_options : "Options"
+text_tutotial : "Tutoriel"
+text_quit_game : "Quitter"
+
+text_work_in_progress: "Travail en cours."
+
+text_player_round: "Round(s) : %s"
+text_player_score: "Score : %s"
+text_turn_count: "Tour : %s"
+text_capitulate_game: "Capituler la partie"
+
+
+
+text_choose_card_to_fight : "Choisisser la carte a combattre"
+
+text_choose_card : "Choisissez une carte de votre main en cliquant dessus."
+text_choose_case: "Choisissez une case en cliquant dessus ou choissisez une autre carte."
+text_validate_case: "Validez votre case en recliquant dessus."
+
+text_online_menu : "Jouer en ligne"
+text_offline_menu : "Jouer hors ligne"
+
+text_next_step : "Suivant"
+text_previous_step: "Precedent"
+text_validate: "Compris !"
+text_chest: "Coffre"
+text_test_game: "Test"
+
+text_tutorial_message_step_1_message_1: "Chaque joueur possede 5 cartes."
+text_tutorial_message_step_1_message_2: "Le plateau est compose de 16 cases sur lesquelles on peut jouer ces cartes."
+text_tutorial_message_step_1_message_3: "Chaque carte de votre couleur sur le plateau vous rapporte 1 point."
+text_tutorial_message_step_1_message_4: "Au debut de son tour, un joueur joue une carte de sa main sur le plateau."
+text_tutorial_message_step_1_message_5: "Quand plus aucun joueur n'a de carte en main, le joueur avec le plus de points gagne une manche."
+text_tutorial_message_step_1_message_6: "Le premier joueur qui gagne 2 manches gagne la partie."
+text_tutorial_message_step_1_message_7: "Jouer votre carte pour gagne une manche."
+
+text_tutorial_message_step_2_message_1: "Les cartes possedent des fleches et des points de vie."
+text_tutorial_message_step_2_message_2: "Si vous jouer une carte dont aucune fleche pointe vers une carte ennmi, il ne se passera rien."
+text_tutorial_message_step_2_message_4: "Jouer votre carte."
+
+
+text_tutorial_message_step_3_message_1: "Les cartes possedent des fleches et des points de vie."
+text_tutorial_message_step_3_message_2: "Si vous jouer une carte une fleche pointe vers une carte ennmi dont aucune fleche de pointe vers la votre..."
+text_tutorial_message_step_3_message_3: "Alors, la carte ennemi devient de votre couleur et leurs points de vie ne changent pas."
+text_tutorial_message_step_3_message_4: "Jouer votre carte pour agner la carte ennemi."
+
+text_tutorial_message_step_4_message_1: "Si vous jouer une carte dont la direction pointe vers une carte dont une fleche pointe vers la votre..."
+text_tutorial_message_step_4_message_2: "Alors, les cartes s'affrontent."
+text_tutorial_message_step_4_message_3: "La carte jouee attaque la carte adverse lui faisant perdre un point de vie"
+text_tutorial_message_step_4_message_4: "puis la carte adverse fait de meme et ainsi de suite."
+text_tutorial_message_step_4_message_5: "La premiere carte dont les points de vie tombe a zero change de couleur et regagne la moitie de ses points de vie initiaux."
+text_tutorial_message_step_4_message_6: "Jouer votre carte pour combattre et gagner la carte ennemi."
+
+
+text_tutorial_message_step_5_message_1: "Bien que la carte jouee attaque la premiere, elle changera de couleur si ses points de vie sont inferieur a une carte ennemi qu'elle attaque"
+text_tutorial_message_step_5_message_2: "Jouer votre carte pour combattre et perdre contre la carte ennemi."
+
+text_tutorial_message_step_6_message_1: "Il arrive de des case soit consummees par le vide."
+text_tutorial_message_step_6_message_2: "Ces cases sont noires, ne compte pour aucun joueur et ne reagissent a rien."
+text_tutorial_message_step_6_message_3: "Jouer votre carte a cote de la case consumee par le vide."
+
+text_tutorial_message_step_7_message_1: "Une carte jouee doit combattre si elle le peut avant d'attaquer."
+text_tutorial_message_step_7_message_2: "Si vous gagner un combat, la carte ennemi vaincu provoque une reaction en chaine."
+text_tutorial_message_step_7_message_3: "Toutes les cartes ennemi que la carte ennemi vaincu pointe changeront de couleur aussi."
+text_tutorial_message_step_7_message_4: "Combattre une carte peut donc remportez plus de points que juste l'attaquer."
+text_tutorial_message_step_7_message_5: "Jouer votre carte pour combattre la carte ennemi et provoquer une reaction en chaine puis enfin attaquer la carte restante."
+
+text_tutorial_message_step_8_message_1: "Attention, si vous perdez un combat, ca sera votre carte qui provoquera une reaction en chaine."
+text_tutorial_message_step_8_message_2: "Jouer votre carte pour perdre contre la carte ennemi et provoquer une reaction en chaine."
+
+text_tutorial_message_step_9_message_1: "Une carte joue est oblige de combattre si elle le peut."
+text_tutorial_message_step_9_message_2: "Dans le cas ou il y a plusieurs choix possible, il faut choisir une carte."
+text_tutorial_message_step_9_message_3: "Il est en general difficile pour une carte de combattre plusieurs cartes ennemies."
+text_tutorial_message_step_9_message_4: "Jouer votre carte pour combattre les cartes ennemis."
+
+text_tutorial_message_step_10_message_1: "Une reaction en chaine peut vous eviter de combattre deux cartes ennemies."
+text_tutorial_message_step_10_message_2: "Jouer votre carte pour gagner les deux cartes ennemi en une seule bataille."
